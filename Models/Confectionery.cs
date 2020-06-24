@@ -16,5 +16,7 @@ namespace Tut12.Models
 
         public double PricePerItem { get; set; }
         public string Type { get; set; }
+
+        public ICollection<Confectionery_Order> Confectionery_Orders { get; set; }
     }
 }

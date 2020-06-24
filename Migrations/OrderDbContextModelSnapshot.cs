@@ -27,38 +27,44 @@ namespace Tut12.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(200)")
+                        .HasMaxLength(200);
 
                     b.Property<double>("PricePerItem")
                         .HasColumnType("float");
 
                     b.Property<string>("Type")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(40)")
+                        .HasMaxLength(40);
 
                     b.HasKey("IdConfectionery");
 
-                    b.ToTable("Confectionery");
+                    b.ToTable("Confectioneries");
                 });
 
             modelBuilder.Entity("Tut12.Models.Confectionery_Order", b =>
                 {
                     b.Property<int>("IdConfectionary")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("IdOrder")
                         .HasColumnType("int");
 
                     b.Property<string>("Notes")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(255)")
+                        .HasMaxLength(255);
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.HasKey("IdConfectionary", "IdOrder");
+                    b.HasKey("IdConfectionary");
 
-                    b.HasIndex("IdOrder");
-
-                    b.ToTable("Confectionery_Order");
+                    b.ToTable("Confectionery_Orders");
                 });
 
             modelBuilder.Entity("Tut12.Models.Customer", b =>
@@ -69,14 +75,18 @@ namespace Tut12.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
 
                     b.Property<string>("Surname")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(60)")
+                        .HasMaxLength(60);
 
                     b.HasKey("IdCustomer");
 
-                    b.ToTable("Customer");
+                    b.ToTable("Customers");
                 });
 
             modelBuilder.Entity("Tut12.Models.Employee", b =>
@@ -87,14 +97,18 @@ namespace Tut12.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
 
                     b.Property<string>("Surname")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(60)")
+                        .HasMaxLength(60);
 
                     b.HasKey("IdEmployee");
 
-                    b.ToTable("Employee");
+                    b.ToTable("Employees");
                 });
 
             modelBuilder.Entity("Tut12.Models.Order", b =>
@@ -117,28 +131,26 @@ namespace Tut12.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Notes")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(255)")
+                        .HasMaxLength(255);
 
                     b.HasKey("IdOrder");
 
-                    b.HasIndex("IdCustomer");
-
-                    b.HasIndex("IdEmployee");
-
-                    b.ToTable("Order");
+                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("Tut12.Models.Confectionery_Order", b =>
                 {
                     b.HasOne("Tut12.Models.Confectionery", "Confectionary")
-                        .WithMany()
+                        .WithMany("Confectionery_Orders")
                         .HasForeignKey("IdConfectionary")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Tut12.Models.Order", "Order")
-                        .WithMany()
-                        .HasForeignKey("IdOrder")
+                        .WithMany("Confectionery_Orders")
+                        .HasForeignKey("IdConfectionary")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -146,14 +158,14 @@ namespace Tut12.Migrations
             modelBuilder.Entity("Tut12.Models.Order", b =>
                 {
                     b.HasOne("Tut12.Models.Customer", "Customer")
-                        .WithMany()
-                        .HasForeignKey("IdCustomer")
+                        .WithMany("Orders")
+                        .HasForeignKey("IdOrder")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Tut12.Models.Employee", "Employee")
-                        .WithMany()
-                        .HasForeignKey("IdEmployee")
+                        .WithMany("Orders")
+                        .HasForeignKey("IdOrder")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

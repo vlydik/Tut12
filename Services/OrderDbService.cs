@@ -24,14 +24,16 @@ namespace Tut12.Services
         {
             string name = request.Name;
 
-            if(name != null)
+            if (name != null)
             {
-                int count = _context.Customer.Where(c => c.Name == name).Count();
+                int count = 0;
+                //int count = _context.Customer.Where(c => c.Name == name).Count();
                 if (count == 0) throw new NoCustomerException("No customer found with name " + name);
             }
 
 
+            return null;
 
-
+        }
     }
 }

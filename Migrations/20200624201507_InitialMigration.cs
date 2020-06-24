@@ -8,135 +8,121 @@ namespace Tut12.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Confectionery",
+                name: "Confectioneries",
                 columns: table => new
                 {
                     IdConfectionery = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(maxLength: 200, nullable: false),
                     PricePerItem = table.Column<double>(nullable: false),
-                    Type = table.Column<string>(nullable: true)
+                    Type = table.Column<string>(maxLength: 40, nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Confectionery", x => x.IdConfectionery);
+                    table.PrimaryKey("PK_Confectioneries", x => x.IdConfectionery);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Customer",
+                name: "Customers",
                 columns: table => new
                 {
                     IdCustomer = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(nullable: true),
-                    Surname = table.Column<string>(nullable: true)
+                    Name = table.Column<string>(maxLength: 50, nullable: false),
+                    Surname = table.Column<string>(maxLength: 60, nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Customer", x => x.IdCustomer);
+                    table.PrimaryKey("PK_Customers", x => x.IdCustomer);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Employee",
+                name: "Employees",
                 columns: table => new
                 {
                     IdEmployee = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(nullable: true),
-                    Surname = table.Column<string>(nullable: true)
+                    Name = table.Column<string>(maxLength: 50, nullable: false),
+                    Surname = table.Column<string>(maxLength: 60, nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Employee", x => x.IdEmployee);
+                    table.PrimaryKey("PK_Employees", x => x.IdEmployee);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Order",
+                name: "Orders",
                 columns: table => new
                 {
                     IdOrder = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     DateAccepted = table.Column<DateTime>(nullable: false),
                     DateFinished = table.Column<DateTime>(nullable: false),
-                    Notes = table.Column<string>(nullable: true),
+                    Notes = table.Column<string>(maxLength: 255, nullable: false),
                     IdCustomer = table.Column<int>(nullable: false),
                     IdEmployee = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Order", x => x.IdOrder);
+                    table.PrimaryKey("PK_Orders", x => x.IdOrder);
                     table.ForeignKey(
-                        name: "FK_Order_Customer_IdCustomer",
-                        column: x => x.IdCustomer,
-                        principalTable: "Customer",
+                        name: "FK_Orders_Customers_IdOrder",
+                        column: x => x.IdOrder,
+                        principalTable: "Customers",
                         principalColumn: "IdCustomer",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Order_Employee_IdEmployee",
-                        column: x => x.IdEmployee,
-                        principalTable: "Employee",
+                        name: "FK_Orders_Employees_IdOrder",
+                        column: x => x.IdOrder,
+                        principalTable: "Employees",
                         principalColumn: "IdEmployee",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Confectionery_Order",
+                name: "Confectionery_Orders",
                 columns: table => new
                 {
-                    IdConfectionary = table.Column<int>(nullable: false),
+                    IdConfectionary = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     IdOrder = table.Column<int>(nullable: false),
                     Quantity = table.Column<int>(nullable: false),
-                    Notes = table.Column<string>(nullable: true)
+                    Notes = table.Column<string>(maxLength: 255, nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Confectionery_Order", x => new { x.IdConfectionary, x.IdOrder });
+                    table.PrimaryKey("PK_Confectionery_Orders", x => x.IdConfectionary);
                     table.ForeignKey(
-                        name: "FK_Confectionery_Order_Confectionery_IdConfectionary",
+                        name: "FK_Confectionery_Orders_Confectioneries_IdConfectionary",
                         column: x => x.IdConfectionary,
-                        principalTable: "Confectionery",
+                        principalTable: "Confectioneries",
                         principalColumn: "IdConfectionery",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Confectionery_Order_Order_IdOrder",
-                        column: x => x.IdOrder,
-                        principalTable: "Order",
+                        name: "FK_Confectionery_Orders_Orders_IdConfectionary",
+                        column: x => x.IdConfectionary,
+                        principalTable: "Orders",
                         principalColumn: "IdOrder",
                         onDelete: ReferentialAction.Cascade);
                 });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Confectionery_Order_IdOrder",
-                table: "Confectionery_Order",
-                column: "IdOrder");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Order_IdCustomer",
-                table: "Order",
-                column: "IdCustomer");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Order_IdEmployee",
-                table: "Order",
-                column: "IdEmployee");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Confectionery_Order");
+                name: "Confectionery_Orders");
 
             migrationBuilder.DropTable(
-                name: "Confectionery");
+                name: "Confectioneries");
 
             migrationBuilder.DropTable(
-                name: "Order");
+                name: "Orders");
 
             migrationBuilder.DropTable(
-                name: "Customer");
+                name: "Customers");
 
             migrationBuilder.DropTable(
-                name: "Employee");
+                name: "Employees");
         }
     }
 }

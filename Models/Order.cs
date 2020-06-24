@@ -27,5 +27,7 @@ namespace Tut12.Models
 
         [ForeignKey("IdEmployee")]
         public Employee Employee { get; set; }
+
+        public ICollection<Confectionery_Order> Confectionery_Orders { get; set; }
     }
 }
