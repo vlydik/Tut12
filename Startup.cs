@@ -27,7 +27,12 @@ namespace Tut12
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            
+            services.AddDbContext<OrderDbContext>(opt =>
+            {
+                opt.UseSqlServer("Data Source=db-mssql;Initial Catalog=s19183;Integrated Security=True");
+            }
+                
+                );
             services.AddControllers();
         }
 
